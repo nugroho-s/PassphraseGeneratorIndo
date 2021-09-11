@@ -12,8 +12,6 @@ class Generator {
                                          isCapitalize: Boolean,
                                          isAddNumber: Boolean,
                                          isAddSymbol: Boolean) : String {
-            sleep(5_000)
-
             val symbols = "!\"#\$%&\\'()*+,-./:;<=>?@[\\\\]^_`{|}~"
 
             if (wordList.isEmpty())

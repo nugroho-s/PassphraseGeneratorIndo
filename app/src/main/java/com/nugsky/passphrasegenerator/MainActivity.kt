@@ -26,14 +26,18 @@ class MainActivity : AppCompatActivity() {
         val passphraseTextView = findViewById<TextView>(R.id.passphraseText)
         val numberInputText = findViewById<EditText>(R.id.numberInputText)
         val numberCheckBox = findViewById<CheckBox>(R.id.useNumberCheckBox)
+        val capitalizeCheckBox = findViewById<CheckBox>(R.id.capitalizeCheckBox)
+        val symbolCheckBox = findViewById<CheckBox>(R.id.useSymbolCheckBox)
 
         val copyButton = findViewById<Button>(R.id.copyButton)
 
         generatorButton.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
+                val isCapitalize = capitalizeCheckBox.isChecked
                 val isAddNumber = numberCheckBox.isChecked
+                val isAddSymbol = symbolCheckBox.isChecked
                 val wordCount = numberInputText.text.toString().toInt()
-                val result = getPassphrase(wordCount, isAddNumber)
+                val result = getPassphrase(wordCount, isCapitalize, isAddNumber)
                 withContext(Dispatchers.Main) {
                     passphraseTextView.text = result
                 }
@@ -47,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun getPassphrase(wordCount: Int, isAddNumber: Boolean): String {
+    private suspend fun getPassphrase(wordCount: Int, isCapitalize: Boolean, isAddNumber: Boolean): String {
         val reader : BufferedReader
         var words: List<String> = ArrayList<String>()
         try {
@@ -61,6 +65,11 @@ class MainActivity : AppCompatActivity() {
         if (words.isEmpty())
             return ""
         val selectedWords = getRandomSubList(words, wordCount) as ArrayList<String>
+        if (isCapitalize) {
+            for (i in 0 until selectedWords.size) {
+                selectedWords[i] = selectedWords[i].replaceFirstChar { it.uppercase() }
+            }
+        }
         if (isAddNumber) {
             val i = Random.nextInt(selectedWords.size)
             selectedWords[i] = selectedWords[i] + "1"

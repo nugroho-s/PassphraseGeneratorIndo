@@ -13,6 +13,7 @@ import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
                 val isAddNumber = numberCheckBox.isChecked
                 val isAddSymbol = symbolCheckBox.isChecked
                 val wordCount = numberInputText.text.toString().toInt()
-                val result = getPassphrase(wordCount, isCapitalize, isAddNumber)
+                val result = getPassphrase(wordCount, isCapitalize, isAddNumber, isAddSymbol)
                 withContext(Dispatchers.Main) {
                     passphraseTextView.text = result
                 }
@@ -51,7 +52,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun getPassphrase(wordCount: Int, isCapitalize: Boolean, isAddNumber: Boolean): String {
+    private suspend fun getPassphrase(wordCount: Int, isCapitalize: Boolean, isAddNumber: Boolean, isAddSymbol: Boolean): String {
+        val symbols = "!\"#\$%&\\'()*+,-./:;<=>?@[\\\\]^_`{|}~"
+
         val reader : BufferedReader
         var words: List<String> = ArrayList<String>()
         try {
@@ -65,6 +68,7 @@ class MainActivity : AppCompatActivity() {
         if (words.isEmpty())
             return ""
         val selectedWords = getRandomSubList(words, wordCount) as ArrayList<String>
+
         if (isCapitalize) {
             for (i in 0 until selectedWords.size) {
                 selectedWords[i] = selectedWords[i].replaceFirstChar { it.uppercase() }
@@ -72,8 +76,14 @@ class MainActivity : AppCompatActivity() {
         }
         if (isAddNumber) {
             val i = Random.nextInt(selectedWords.size)
-            selectedWords[i] = selectedWords[i] + "1"
+            selectedWords[i] = selectedWords[i] + ThreadLocalRandom.current().nextInt(10)
         }
+        if (isAddSymbol) {
+            val i = Random.nextInt(selectedWords.size)
+            val randomSymbol = symbols[ThreadLocalRandom.current().nextInt(symbols.length)]
+            selectedWords[i] = selectedWords[i] + randomSymbol
+        }
+
         return selectedWords.joinToString("-")
     }
 

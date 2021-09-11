@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.nugsky.passphrasegenerator.util.Generator
 import com.nugsky.passphrasegenerator.util.Validator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,8 +15,6 @@ import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
-import java.util.concurrent.ThreadLocalRandom
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "PassphraseGenerator"
@@ -62,8 +61,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun getPassphrase(separator: String, wordCount: Int, isCapitalize: Boolean, isAddNumber: Boolean, isAddSymbol: Boolean): String {
-        val symbols = "!\"#\$%&\\'()*+,-./:;<=>?@[\\\\]^_`{|}~"
-
         val reader : BufferedReader
         var words: List<String> = ArrayList<String>()
         try {
@@ -74,33 +71,6 @@ class MainActivity : AppCompatActivity() {
         } catch (e: IOException) {
             Log.e(TAG, "getPassphrase exception", e)
         }
-        if (words.isEmpty())
-            return ""
-        val selectedWords = getRandomSubList(words, wordCount) as ArrayList<String>
-
-        if (isCapitalize) {
-            for (i in 0 until selectedWords.size) {
-                selectedWords[i] = selectedWords[i].replaceFirstChar { it.uppercase() }
-            }
-        }
-        if (isAddNumber) {
-            val i = Random.nextInt(selectedWords.size)
-            selectedWords[i] = selectedWords[i] + ThreadLocalRandom.current().nextInt(10)
-        }
-        if (isAddSymbol) {
-            val i = Random.nextInt(selectedWords.size)
-            val randomSymbol = symbols[ThreadLocalRandom.current().nextInt(symbols.length)]
-            selectedWords[i] = selectedWords[i] + randomSymbol
-        }
-
-        return selectedWords.joinToString(separator)
-    }
-
-    private suspend fun getRandomSubList(words: List<Any>, num: Int): List<Any> {
-        val subList = ArrayList<Any>()
-        for (i in 1..num) {
-            subList.add(words.random())
-        }
-        return subList
+        return Generator.getPassphrase(words, separator, wordCount, isCapitalize, isAddNumber, isAddSymbol)
     }
 }

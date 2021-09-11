@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.nugsky.passphrasegenerator.util.Validator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,16 +30,24 @@ class MainActivity : AppCompatActivity() {
         val numberCheckBox = findViewById<CheckBox>(R.id.useNumberCheckBox)
         val capitalizeCheckBox = findViewById<CheckBox>(R.id.capitalizeCheckBox)
         val symbolCheckBox = findViewById<CheckBox>(R.id.useSymbolCheckBox)
+        val separatorInputText = findViewById<EditText>(R.id.separatorInputText)
 
         val copyButton = findViewById<Button>(R.id.copyButton)
 
         generatorButton.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
+                if (!Validator.validateParameters(numberInputText)) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@MainActivity, "invalid parameter", Toast.LENGTH_SHORT).show()
+                    }
+                    return@launch
+                }
+                val separator = if (separatorInputText.text.isEmpty()) "" else separatorInputText.text.toString()[0].toString()
+                val wordCount = numberInputText.text.toString().toInt()
                 val isCapitalize = capitalizeCheckBox.isChecked
                 val isAddNumber = numberCheckBox.isChecked
                 val isAddSymbol = symbolCheckBox.isChecked
-                val wordCount = numberInputText.text.toString().toInt()
-                val result = getPassphrase(wordCount, isCapitalize, isAddNumber, isAddSymbol)
+                val result = getPassphrase(separator, wordCount, isCapitalize, isAddNumber, isAddSymbol)
                 withContext(Dispatchers.Main) {
                     passphraseTextView.text = result
                 }
@@ -52,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun getPassphrase(wordCount: Int, isCapitalize: Boolean, isAddNumber: Boolean, isAddSymbol: Boolean): String {
+    private suspend fun getPassphrase(separator: String, wordCount: Int, isCapitalize: Boolean, isAddNumber: Boolean, isAddSymbol: Boolean): String {
         val symbols = "!\"#\$%&\\'()*+,-./:;<=>?@[\\\\]^_`{|}~"
 
         val reader : BufferedReader
@@ -84,7 +93,7 @@ class MainActivity : AppCompatActivity() {
             selectedWords[i] = selectedWords[i] + randomSymbol
         }
 
-        return selectedWords.joinToString("-")
+        return selectedWords.joinToString(separator)
     }
 
     private suspend fun getRandomSubList(words: List<Any>, num: Int): List<Any> {

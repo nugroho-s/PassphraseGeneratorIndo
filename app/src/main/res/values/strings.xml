@@ -1,3 +1,20 @@
 <resources>
-  <string name="app_name">PassphraseGenerator</string>
+  <string name="app_name">Passphrase Generator Indo</string>
+  <string name="passphrase_placeholder">Frasa sandi akan muncul di sini</string>
+  <string name="default_word_count" translatable="false">6</string>
+  <string name="default_separator" translatable="false">-</string>
+  <string name="word_count_label">Jumlah kata (4–24)</string>
+  <string name="separator_label">Pemisah (hingga 16 karakter)</string>
+  <string name="capitalize_label">Huruf awal kapital</string>
+  <string name="number_label">Tambahkan angka</string>
+  <string name="symbol_label">Tambahkan simbol</string>
+  <string name="generate_label">Buat frasa sandi</string>
+  <string name="copy_label">Salin frasa sandi</string>
+  <string name="clear_label">Hapus frasa sandi</string>
+  <string name="invalid_word_count">Masukkan jumlah kata dari 4 hingga 24.</string>
+  <string name="invalid_separator">Pemisah maksimal 16 karakter, tanpa karakter kontrol.</string>
+  <string name="generation_failed">Gagal membuat frasa sandi. Silakan coba lagi.</string>
+  <string name="copied">Disalin. Papan klip dihapus setelah 60 detik saat aplikasi aktif.</string>
+  <string name="copy_failed">Tidak dapat mengakses papan klip.</string>
+  <string name="security_hint">Gunakan minimal 6 kata untuk frasa sandi yang lebih kuat. Semua proses berjalan di perangkat. Frasa sandi dihapus dari layar saat aplikasi ditinggalkan.</string>
 </resources>

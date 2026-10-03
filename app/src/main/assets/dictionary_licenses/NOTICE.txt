@@ -1,0 +1,29 @@
+Indonesian dictionary attribution
+
+Source: hunspell-id, https://github.com/shuLhan/hunspell-id
+Upstream revision: 5939c33c8c7b2df9691d9173ca84c8a987902e1f
+Upstream file: id_ID.dic
+Upstream SHA-256: 42cf27a0ba5966eaf72846419200a0318ef4db42066947bd840b140604b3385c
+Copyright: hunspell-id Authors
+SPDX-License-Identifier: LGPL-3.0-only
+
+This app's words_list.txt is a modified version of the upstream dictionary.
+Modified on 2026-10-03 for Passphrase Generator Indo:
+- Removed the Hunspell entry-count header and affix flags.
+- Normalized Unicode to NFC, converted entries to lowercase using casefold,
+  and removed duplicates.
+- Kept alphabetic single words with lengths from 3 to 16 characters.
+- Sorted the 42,816 remaining entries and wrote UTF-8, one word per line.
+- Did not expand Hunspell affix rules into generated forms.
+
+The readable modified dictionary is included as assets/words_list.txt in the APK.
+The original source and reproducible import script are provided in the app repo:
+https://github.com/nugroho-s/PassphraseGeneratorIndo
+  third_party/hunspell-id/id_ID.dic
+  tools/import_hunspell_dictionary.py
+
+Full LGPL v3 and GPL v3 license texts are included beside this notice.
+This dictionary is distributed WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+This notice describes the dictionary license; it does not assign a license to
+unrelated application code.

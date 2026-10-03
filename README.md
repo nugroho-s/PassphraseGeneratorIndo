@@ -2,6 +2,19 @@
 
 An offline Android app that creates passphrases from the bundled Indonesian dictionary. Requires Android 10 (API 29) or newer. No network permission, account, analytics, or passphrase storage.
 
+## Changes in 2.1
+
+The dictionary now uses **42,816 unique lowercase words** from [Hunspell Indonesian](https://github.com/shuLhan/hunspell-id), replacing the previous 28,526-entry dictionary. Entries are alphabetic single words of 3–16 characters. The six-word default is retained.
+
+The upstream source is pinned and vendored in [third_party/hunspell-id](third_party/hunspell-id/README.md). The dictionary is licensed **LGPL-3.0-only**; attribution, modification notes, and complete LGPL/GPL license texts are bundled in `app/src/main/assets/dictionary_licenses` and included in the APK.
+
+Regenerate or verify the dictionary offline:
+
+```sh
+python3 tools/import_hunspell_dictionary.py
+python3 tools/import_hunspell_dictionary.py --check
+```
+
 ## Changes in 2.0
 
 - Cryptographic randomness (`SecureRandom`) for every word, digit, symbol, and placement; words are sampled independently with replacement.
@@ -14,7 +27,7 @@ An offline Android app that creates passphrases from the bundled Indonesian dict
 
 The clipboard can still be read by permitted apps and keyboards. Cleanup relies on this app process staying alive and regaining focus; if the process is killed, app-managed cleanup cannot run. Avoid copying on untrusted devices. A Java/Kotlin string cannot be reliably wiped from memory; clearing output removes app references, not every possible memory copy.
 
-The dictionary is inherited from the original repository. Some entries are short, obscure, or contain hyphens; choosing more words helps. Capitalization is deterministic and does not add randomness. Separators and case conversion can make distinct sequences produce the same output, so this app does not claim an exact entropy score. Use a unique passphrase for each account.
+The filtered dictionary excludes phrases, punctuation, and very short/long entries, but some words remain obscure. Choosing more words helps. Capitalization is deterministic and does not add randomness. Separators and case conversion can make distinct sequences produce the same output, so this app does not claim an exact entropy score. Use a unique passphrase for each account.
 
 ## Build
 
